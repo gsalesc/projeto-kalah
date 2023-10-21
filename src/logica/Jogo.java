@@ -3,6 +3,7 @@ package logica;
 import modelo.Armazem;
 import modelo.Casa;
 import modelo.Deposito;
+import modelo.Proprietario;
 import modelo.Terreno;
 import util.Constantes;
 import util.Turno;
@@ -47,10 +48,21 @@ public class Jogo {
 					colocarSemente(depositoJogador);
 					return jogador;
 				} 
+				
 				//SE CAIR NUMA CASA VAZIA E A DO LADO OPOSTO (OPONENTE) TIVER SEMENTES 
 				else if(retornarCasaJogador(proximaCasaNum, jogador).getSementes() == 0) { 
 					Turno verificarOponente = retornaProximoAJogar(jogador);
-					Casa casaOponente = retornarCasaJogador(proximaCasaNum, verificarOponente);
+					
+					int casaOposta = Constantes.MAX_CASAS - (proximaCasaNum-1);
+							
+							//1 -> 6
+							//2 -> 5
+							//3 -> 4
+							//4 -> 3
+							//5 -> 2
+							//6 -> 1
+			
+					Casa casaOponente = retornarCasaJogador(casaOposta, verificarOponente);
 					
 					if(casaOponente.getSementes() > 0) {
 						int sementesOponente = casaOponente.removerTodasAsSementes();
@@ -69,11 +81,38 @@ public class Jogo {
 		return this.retornaProximoAJogar(jogador);
 	}
 	
+	/**
+	  * Verifica se tem e quem é o vencedor
+	  * 
+	  * @return            o vencedor
+	  * @author            Gabriel Sales
+	  */
+	
 	public int verificarVencedor() {
 		
+		Proprietario jogador1 = this.terreno.getJogador1();
+		Proprietario jogador2 = this.terreno.getJogador2();
 		
+		boolean temVencedor = false;
+		int vencedor = 0;
 		
-		return 0;
+		for(Casa casa : jogador1.getCasas()) {
+			if(casa.getSementes() == 0) temVencedor = true;
+			else temVencedor = false;
+		}
+		
+		for(Casa casa : jogador2.getCasas()) {
+			if(casa.getSementes() == 0) temVencedor = true;
+			else temVencedor = false;
+		}
+		
+		if(temVencedor == true) {
+			if(jogador1.getDeposito().getSementes() > jogador2.getDeposito().getSementes())
+				vencedor = 1;
+			else vencedor = 2;
+		}
+		
+		return vencedor;
 	}
 	
 	private void colocarSemente(Armazem lugarEscolhido) {
