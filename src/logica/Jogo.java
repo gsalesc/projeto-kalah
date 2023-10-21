@@ -32,52 +32,55 @@ public class Jogo {
 		int proximaCasaNum = casaEscolhida+1;
 		Casa proximaCasa = null;
 		
-		for(int i = 1; i <= sementesCasa; i++) {
-			//SEMEAR CASAS
-			if(i != sementesCasa) {
-				if(proximaCasaNum == Constantes.DEPOSITO) {
-					colocarSemente(depositoJogador);
-					proximaCasaNum=1;
-				} else {
-					proximaCasa = retornarCasaJogador(proximaCasaNum, jogador);
-					colocarSemente(proximaCasa);
-					proximaCasaNum++;
-				}
-			} else { //VERIFICAR ULTIMA SEMENTE
-				if(proximaCasaNum == Constantes.DEPOSITO) { //JOGA NOVAMENTE
-					colocarSemente(depositoJogador);
-					return jogador;
-				} 
-				
-				//SE CAIR NUMA CASA VAZIA E A DO LADO OPOSTO (OPONENTE) TIVER SEMENTES 
-				else if(retornarCasaJogador(proximaCasaNum, jogador).getSementes() == 0) { 
-					Turno verificarOponente = retornaProximoAJogar(jogador);
-					
-					int casaOposta = Constantes.MAX_CASAS - (proximaCasaNum-1);
-							
-							//1 -> 6
-							//2 -> 5
-							//3 -> 4
-							//4 -> 3
-							//5 -> 2
-							//6 -> 1
-			
-					Casa casaOponente = retornarCasaJogador(casaOposta, verificarOponente);
-					
-					if(casaOponente.getSementes() > 0) {
-						int sementesOponente = casaOponente.removerTodasAsSementes();
-						
-						colocarSemente(depositoJogador); //COLOCANDO ULTIMA SEMENTE NO DEPOSITO
-						colocarSementesNoDeposito(depositoJogador, sementesOponente); //COLOCANDO SEMENTES COLHIDAS
+			for(int i = 1; i <= sementesCasa; i++) {
+				//SEMEAR CASAS
+				if(i != sementesCasa) {
+					if(proximaCasaNum == Constantes.DEPOSITO) {
+						colocarSemente(depositoJogador);
+						proximaCasaNum=1;
+					} else {
+						proximaCasa = retornarCasaJogador(proximaCasaNum, jogador);
+						colocarSemente(proximaCasa);
+						proximaCasaNum++;
 					}
+				} else { //VERIFICAR ULTIMA SEMENTE
+					if(proximaCasaNum == Constantes.DEPOSITO) { //JOGA NOVAMENTE
+						colocarSemente(depositoJogador);
+						return jogador;
+					} 
 					
-				} else {
-					proximaCasa = retornarCasaJogador(proximaCasaNum, jogador);
-					colocarSemente(proximaCasa);
+					//SE CAIR NUMA CASA VAZIA E A DO LADO OPOSTO (OPONENTE) TIVER SEMENTES 
+					else if(retornarCasaJogador(proximaCasaNum, jogador).getSementes() == 0) { 
+						Turno verificarOponente = retornaProximoAJogar(jogador);
+						
+						int casaOposta = Constantes.MAX_CASAS - (proximaCasaNum-1);
+								
+								//1 -> 6
+								//2 -> 5
+								//3 -> 4
+								//4 -> 3
+								//5 -> 2
+								//6 -> 1
+				
+						Casa casaOponente = retornarCasaJogador(casaOposta, verificarOponente);
+						
+						if(casaOponente.getSementes() > 0) {
+							int sementesOponente = casaOponente.removerTodasAsSementes();
+							
+							colocarSemente(depositoJogador); //COLOCANDO ULTIMA SEMENTE NO DEPOSITO
+							colocarSementesNoDeposito(depositoJogador, sementesOponente); //COLOCANDO SEMENTES COLHIDAS
+						}
+						
+					} else {
+						proximaCasa = retornarCasaJogador(proximaCasaNum, jogador);
+						colocarSemente(proximaCasa);
+					}
 				}
+				
+				
 			}
-		}
-		
+			
+
 		return this.retornaProximoAJogar(jogador);
 	}
 	
@@ -96,15 +99,24 @@ public class Jogo {
 		boolean temVencedor = false;
 		int vencedor = 0;
 		
-		for(Casa casa : jogador1.getCasas()) {
-			if(casa.getSementes() == 0) temVencedor = true;
-			else temVencedor = false;
-		}
+		if(jogador1.getCasa(0).getSementes() == 0
+				&& jogador1.getCasa(1).getSementes() == 0
+				&& jogador1.getCasa(2).getSementes() == 0
+				&& jogador1.getCasa(3).getSementes() == 0
+				&& jogador1.getCasa(4).getSementes() == 0
+				&& jogador1.getCasa(5).getSementes() == 0) 
+			temVencedor = true;
+		else temVencedor = false;
 		
-		for(Casa casa : jogador2.getCasas()) {
-			if(casa.getSementes() == 0) temVencedor = true;
-			else temVencedor = false;
-		}
+		
+		if(jogador2.getCasa(0).getSementes() == 0
+				&& jogador2.getCasa(1).getSementes() == 0
+				&& jogador2.getCasa(2).getSementes() == 0
+				&& jogador2.getCasa(3).getSementes() == 0
+				&& jogador2.getCasa(4).getSementes() == 0
+				&& jogador2.getCasa(5).getSementes() == 0) 
+			temVencedor = true;
+		else temVencedor = false;
 		
 		if(temVencedor == true) {
 			if(jogador1.getDeposito().getSementes() > jogador2.getDeposito().getSementes())
