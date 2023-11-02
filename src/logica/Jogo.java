@@ -26,54 +26,76 @@ public class Jogo {
 	public Turno fazerJogada(int casaEscolhida, Turno jogador) {
 		Casa casaJogador = retornarCasaJogador(casaEscolhida, jogador);
 		Deposito depositoJogador = retornarDepositoJogador(jogador);
+		int contadorCasas = casaEscolhida+1; //a proxima casa
 
 		int sementesCasa = casaJogador.removerTodasAsSementes();
 		
-		int proximaCasaNum = casaEscolhida+1;
 		Casa proximaCasa = null;
-		
+		Turno turnoOponente = retornaProximoAJogar(jogador);
+
 			for(int i = 1; i <= sementesCasa; i++) {
 				//SEMEAR CASAS
 				if(i != sementesCasa) {
-					if(proximaCasaNum == Constantes.DEPOSITO) {
-						colocarSemente(depositoJogador);
-						proximaCasaNum=1;
-					} else {
-						proximaCasa = retornarCasaJogador(proximaCasaNum, jogador);
-						colocarSemente(proximaCasa);
-						proximaCasaNum++;
+					if(contadorCasas <= 7) { //jogador atual
+						if(contadorCasas == Constantes.DEPOSITO) {
+							
+							colocarSemente(depositoJogador);
+							contadorCasas++;
+							
+						} else {
+							
+							proximaCasa = retornarCasaJogador(contadorCasas, jogador);
+							colocarSemente(proximaCasa);
+							contadorCasas++;
+						}
+					}
+					
+					else { //oponente
+						
+						if(contadorCasas <= 13) { 
+							
+							Casa oponente = retornarCasaJogador(contadorCasas-7, turnoOponente);
+							colocarSemente(oponente);
+							contadorCasas++;
+							
+						} else {
+							
+							contadorCasas = 1;
+							proximaCasa = retornarCasaJogador(contadorCasas, jogador);
+							colocarSemente(proximaCasa);
+							
+						}
 					}
 				} else { //VERIFICAR ULTIMA SEMENTE
-					if(proximaCasaNum == Constantes.DEPOSITO) { //JOGA NOVAMENTE
-						colocarSemente(depositoJogador);
-						return jogador;
-					} 
 					
-					//SE CAIR NUMA CASA VAZIA E A DO LADO OPOSTO (OPONENTE) TIVER SEMENTES 
-					else if(retornarCasaJogador(proximaCasaNum, jogador).getSementes() == 0) { 
-						Turno verificarOponente = retornaProximoAJogar(jogador);
+					if(contadorCasas <= 7) {
+						if(contadorCasas == Constantes.DEPOSITO) { //JOGA NOVAMENTE
+							colocarSemente(depositoJogador);
+							return jogador;
+						} 
 						
-						int casaOposta = Constantes.MAX_CASAS - (proximaCasaNum-1);
-								
-								//1 -> 6
-								//2 -> 5
-								//3 -> 4
-								//4 -> 3
-								//5 -> 2
-								//6 -> 1
-				
-						Casa casaOponente = retornarCasaJogador(casaOposta, verificarOponente);
-						
-						if(casaOponente.getSementes() > 0) {
-							int sementesOponente = casaOponente.removerTodasAsSementes();
+						//SE CAIR NUMA CASA VAZIA E A DO LADO OPOSTO (OPONENTE) TIVER SEMENTES 
+						else if(retornarCasaJogador(contadorCasas, jogador).getSementes() == 0) { 
+							Turno verificarOponente = retornaProximoAJogar(jogador);
 							
-							colocarSemente(depositoJogador); //COLOCANDO ULTIMA SEMENTE NO DEPOSITO
-							colocarSementesNoDeposito(depositoJogador, sementesOponente); //COLOCANDO SEMENTES COLHIDAS
+							int casaOposta = Constantes.MAX_CASAS - (contadorCasas-1);
+	
+							Casa casaOponente = retornarCasaJogador(casaOposta, verificarOponente);
+							
+							if(casaOponente.getSementes() > 0) {
+								int sementesOponente = casaOponente.removerTodasAsSementes();
+								
+								colocarSemente(depositoJogador); //COLOCANDO ULTIMA SEMENTE NO DEPOSITO
+								colocarSementesNoDeposito(depositoJogador, sementesOponente); //COLOCANDO SEMENTES COLHIDAS
+							}
+							
+						} else {
+							proximaCasa = retornarCasaJogador(contadorCasas, jogador);
+							colocarSemente(proximaCasa);
 						}
-						
 					} else {
-						proximaCasa = retornarCasaJogador(proximaCasaNum, jogador);
-						colocarSemente(proximaCasa);
+						Casa oponente = retornarCasaJogador(contadorCasas-7, turnoOponente);
+						colocarSemente(oponente);
 					}
 				}
 				
