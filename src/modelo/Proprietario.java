@@ -26,4 +26,12 @@ public class Proprietario {
 	public Casa getCasa(int index) {
 		return this.casas[index];
 	}
+	
+	public int getSementesCasa(int casa) {
+		return this.casas[casa].getSementes();
+	}
+	
+	public int getSementesDeposito() {
+		return this.deposito.getSementes();
+	}
 }

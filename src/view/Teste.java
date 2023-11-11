@@ -15,52 +15,84 @@ public class Teste {
 		Turno turno = Turno.JOGADOR_UM;
 		int casa = 0;
 		
-		while(jogo.verificarVencedor() != 1 && jogo.verificarVencedor() != 2) {
+		int vencedor = jogo.verificarVencedor();
+		String novamente = "";
+		
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		while(vencedor != 1 && vencedor != 2) {
 			if(turno == Turno.JOGADOR_UM) {
 				printJogo(jogo);
-				System.out.print("JOGADOR 1\n");
+				
+				if(novamente.equals("")) {
+					System.out.print("JOGADOR 1\n");
+				} else {
+					System.out.print("JOGADOR 1" + novamente + "\n");
+				}
+				
+				novamente = "";
 				System.out.print("Escolha a casa: ");
 				casa = scan.nextInt();
 				turno = jogo.fazerJogada(casa, turno);
 				
+				if(turno == Turno.JOGADOR_UM) {
+					novamente = " - Jogue novamente";
+				}
+				
 			} else if (turno == Turno.JOGADOR_DOIS) {
 				printJogo(jogo);
-				System.out.print("JOGADOR 2\n");
+				
+				if(novamente.equals("")) {
+					System.out.print("JOGADOR 2\n");
+				} else {
+					System.out.print("JOGADOR 2" + novamente + "\n");
+				}
+				
+				novamente = "";
 				System.out.print("Escolha a casa: ");
 				casa = scan.nextInt();
-				turno = jogo.fazerJogada(casa, turno);				
+				turno = jogo.fazerJogada(casa, turno);
+				
+				if(turno == Turno.JOGADOR_DOIS) {
+					novamente = " - Jogue novamente";
+				}
 			}
+			
+			vencedor = jogo.verificarVencedor();
 			
 			System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
 		}
 		
-		if(jogo.verificarVencedor() == 1) {
+		if(vencedor == 1) {
 			System.out.println("JOGADOR 1 VENCEU!!!");
-		} else if(jogo.verificarVencedor() == 2) {
+		} else if(vencedor == 2) {
 			System.out.println("JOGADOR 2 VENCEU!!!");
 		}
 		
+		System.out.println("Jogador 1 - Sementes no depósito: " + jogo.getTerreno().getSementesDepositoJogador(Turno.JOGADOR_UM));
+		System.out.println("Jogador 2 - Sementes no depósito: " + jogo.getTerreno().getSementesDepositoJogador(Turno.JOGADOR_DOIS));
+		
 		scan.close();
+		
 	
 	}
 	
 	private static void printJogo(Jogo jogo) throws IOException{
-		int jg1Dep = jogo.getTerreno().getJogador1().getDeposito().getSementes();
-		int jg1C6 = jogo.getTerreno().getJogador1().getCasa(5).getSementes();
-		int jg1C5 = jogo.getTerreno().getJogador1().getCasa(4).getSementes();
-		int jg1C4 = jogo.getTerreno().getJogador1().getCasa(3).getSementes();
-		int jg1C3 = jogo.getTerreno().getJogador1().getCasa(2).getSementes();
-		int jg1C2 = jogo.getTerreno().getJogador1().getCasa(1).getSementes();
-		int jg1C1 = jogo.getTerreno().getJogador1().getCasa(0).getSementes();
+		int jg1Dep = jogo.getTerreno().getSementesDepositoJogador(Turno.JOGADOR_UM);
+		int jg1C6 = jogo.getTerreno().getSementesCasaJogador(5, Turno.JOGADOR_UM);
+		int jg1C5 = jogo.getTerreno().getSementesCasaJogador(4, Turno.JOGADOR_UM);
+		int jg1C4 = jogo.getTerreno().getSementesCasaJogador(3, Turno.JOGADOR_UM);
+		int jg1C3 = jogo.getTerreno().getSementesCasaJogador(2, Turno.JOGADOR_UM);
+		int jg1C2 = jogo.getTerreno().getSementesCasaJogador(1, Turno.JOGADOR_UM);
+		int jg1C1 = jogo.getTerreno().getSementesCasaJogador(0, Turno.JOGADOR_UM);
 		
-		int jg2Dep = jogo.getTerreno().getJogador2().getDeposito().getSementes();
-		int jg2C6 = jogo.getTerreno().getJogador2().getCasa(5).getSementes();
-		int jg2C5 = jogo.getTerreno().getJogador2().getCasa(4).getSementes();
-		int jg2C4 = jogo.getTerreno().getJogador2().getCasa(3).getSementes();
-		int jg2C3 = jogo.getTerreno().getJogador2().getCasa(2).getSementes();
-		int jg2C2 = jogo.getTerreno().getJogador2().getCasa(1).getSementes();
-		int jg2C1 = jogo.getTerreno().getJogador2().getCasa(0).getSementes();
+		int jg2Dep = jogo.getTerreno().getSementesDepositoJogador(Turno.JOGADOR_DOIS);
+		int jg2C6 = jogo.getTerreno().getSementesCasaJogador(5, Turno.JOGADOR_DOIS);
+		int jg2C5 = jogo.getTerreno().getSementesCasaJogador(4, Turno.JOGADOR_DOIS);
+		int jg2C4 = jogo.getTerreno().getSementesCasaJogador(3, Turno.JOGADOR_DOIS);
+		int jg2C3 = jogo.getTerreno().getSementesCasaJogador(2, Turno.JOGADOR_DOIS);
+		int jg2C2 = jogo.getTerreno().getSementesCasaJogador(1, Turno.JOGADOR_DOIS);
+		int jg2C1 = jogo.getTerreno().getSementesCasaJogador(0, Turno.JOGADOR_DOIS);
 		
 		System.out.println("              <-----------          ");
 		System.out.println("       **************************          ");
@@ -70,8 +102,6 @@ public class Teste {
 		System.out.println("        | " + jg1C1 + " | " + jg1C2 + " | " + jg1C3 + " | " + jg1C4 + " | " + jg1C5 + " | " + jg1C6 + " | ");
 		System.out.println("               Jogador 1                    ");
 		System.out.println("       **************************          ");
-		System.out.println("              ------------>          ");
-		
-		
+		System.out.println("              ------------>          ");	
 	}
 }

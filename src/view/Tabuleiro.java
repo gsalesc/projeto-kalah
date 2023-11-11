@@ -10,7 +10,7 @@ public class Tabuleiro extends JFrame{
 		
 		this.setLayout(new BorderLayout());
 		this.setSize(300, 300);
-		this.add(teste, BorderLayout.WEST);
+		this.add(teste, BorderLayout.CENTER);
 		this.setVisible(true);
 	}
 }
